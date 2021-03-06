@@ -1,0 +1,61 @@
+version: '3'
+
+
+services:
+  doc_container_2:
+    build: './consumers/web'
+    # Host port proxy to 80
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./consumers/web:/consumers/web
+    environment:
+      # If a production enviroment is desired, set the APP_ENV variable to production
+      # APP_ENV: 'production'
+      APP_ENV: 'development'
+    links:
+      - doc_container_1
+
+  doc_container_1:
+    build: './api'
+    restart: always
+    command: yarn dev
+    # api host port defined the same as in the container
+    links: 
+      - postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mali
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./api:/api"
+
+  postgres:
+    image: postgres:10.7
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: mali
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+
+
+  pgadmin4:
+    image: dpage/pgadmin4:4.21
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@mali.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      VIRTUAL_HOST: postgres.mali.local
+    volumes:
+      - pgadmin:/root/.pgadmin
+      - ./config/postgres-servers.json:/pgadmin4/servers.json
+    ports:
+      - "5050:80"
+
+volumes:
+  postgres-data:
+  pgadmin:

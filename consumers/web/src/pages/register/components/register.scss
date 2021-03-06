@@ -1,0 +1,35 @@
+.register {
+  height: 100%;
+    margin: 17% 20%;
+    width: 50%;
+    color: gray;
+    max-width: 1398px;
+  color: gray;
+  max-width: 1398px;
+  &__left {
+    width: 50%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    i {
+      margin-right: 8px;
+    }
+  }
+  &__right {
+    width: 50%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-end;
+    &__add-device{
+      min-width: 168px;
+    }
+  }
+  button {
+    font-size: 14px !important;
+  }
+  .btn-secondary {
+    background-color: #515151;
+    border: 1px solid #515151;
+  }
+
+}
